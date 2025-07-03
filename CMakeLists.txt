@@ -17,6 +17,11 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        persona.h
+        gestor_datos.h
+        gestor_datos.cpp
+        analizador_trafico.h
+        analizador_trafico.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
