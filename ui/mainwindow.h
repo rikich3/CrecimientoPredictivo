@@ -18,9 +18,9 @@
 #include <QSplashScreen>
 #include <QTimer>
 
-#include "persona.h"
-#include "gestor_datos.h"
-#include "analizador_trafico.h"
+#include "../data_estructures/persona.h"
+#include "../data_estructures/gestor_datos.h"
+#include "../system/analizador_trafico.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -41,7 +41,6 @@ private slots:
     void onTipoEspacioChanged();
     void onEdadMinChanged();
     void onEdadMaxChanged();
-    void actualizarRequiereInternet();
 
 private:
     Ui::MainWindow *ui;
@@ -83,6 +82,7 @@ private:
     void mostrarResultados(const ResultadoAnalisis& resultado);
     void mostrarSplashScreen();
     void validarEntradas();
+    void actualizarRequiereInternet();
     
     // Métodos de la interfaz
     void actualizarEspacios();

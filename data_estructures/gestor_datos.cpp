@@ -60,7 +60,13 @@ void GestorDatos::generarPoblacion(int tamaño)
         bool accesoInternet = obtenerAccesoInternetAleatorio(edad);
         QString distrito = obtenerDistritoAleatorio();
         
-        poblacion.append(Persona(edad, sexo, accesoInternet, distrito));
+        // Generar valores aleatorios para los nuevos campos del modelo de uplift
+        double ingresos = 25000 + (QRandomGenerator::global()->generateDouble() * 75000); // 25k-100k
+        double influenciabilidad = 0.2 + (QRandomGenerator::global()->generateDouble() * 0.8); // 0.2-1.0
+        double gasto = 150 + (QRandomGenerator::global()->generateDouble() * 1850); // 150-2000
+        
+        poblacion.append(Persona(i + 1, edad, sexo, accesoInternet, distrito, 
+                               ingresos, distrito, influenciabilidad, gasto));
     }
 }
 
@@ -95,12 +101,23 @@ void GestorDatos::cargarPoblacionDesdeCSV(const QString& rutaArchivo)
         QStringList datos = linea.split(',');
         
         if (datos.size() >= 4) {
+            int id = poblacion.size() + 1; // Generar ID secuencial
             int edad = datos[0].toInt();
             QString sexo = datos[1].trimmed();
             bool accesoInternet = (datos[2].toInt() == 1);
             QString distrito = datos[3].trimmed();
             
-            poblacion.append(Persona(edad, sexo, accesoInternet, distrito));
+            // Si el CSV tiene más campos, usarlos; si no, generar valores por defecto
+            double ingresos = (datos.size() > 4) ? datos[4].toDouble() : 
+                              25000 + (QRandomGenerator::global()->generateDouble() * 75000);
+            QString ubicacion = (datos.size() > 5) ? datos[5].trimmed() : distrito;
+            double influenciabilidad = (datos.size() > 6) ? datos[6].toDouble() :
+                                      0.2 + (QRandomGenerator::global()->generateDouble() * 0.8);
+            double gasto = (datos.size() > 7) ? datos[7].toDouble() :
+                          150 + (QRandomGenerator::global()->generateDouble() * 1850);
+            
+            poblacion.append(Persona(id, edad, sexo, accesoInternet, distrito, 
+                                   ingresos, ubicacion, influenciabilidad, gasto));
         }
     }
     

@@ -1,11 +1,13 @@
 #ifndef ANALIZADOR_TRAFICO_H
 #define ANALIZADOR_TRAFICO_H
 
-#include "persona.h"
+#include "../data_estructures/persona.h"
+#include "uplifting_model.h"
 #include <QVector>
 #include <QString>
 #include <QMap>
 #include <QRandomGenerator>
+#include <memory>
 
 class AnalizadorTrafico
 {
@@ -18,6 +20,14 @@ public:
                        const QString& espacio, 
                        const QString& producto,
                        const QString& tipoEspacio);
+    
+    // Nuevo método con filtro de uplift
+    int calcularTraficoConUplift(const QVector<Persona>& poblacion, 
+                                const ClienteIdeal& cliente, 
+                                const QString& espacio, 
+                                const QString& producto,
+                                const QString& tipoEspacio,
+                                double umbralInfluenciabilidad = 0.5);
     
     // Criterios de inclusión
     bool cumpleCriterioInclusion(const Persona& persona, 
@@ -33,10 +43,18 @@ public:
     // Configuración de productos
     void configurarProductos();
     
+    // Métodos para análisis de uplift
+    QMap<QString, double> obtenerEstadisticasUplift(const QVector<Persona>& poblacion);
+    QVector<Persona> filtrarPorInfluenciabilidad(const QVector<Persona>& poblacion, 
+                                                 double umbral = 0.5);
+    
 private:
     QMap<QString, QVector<QString>> categoriasPorTipo;
     QVector<QString> productosDigitales;
     QVector<QString> productosVisuales;
+    
+    // Modelo de uplift
+    std::unique_ptr<UpliftModel::UpliftTreeModel> modeloUplift;
     
     // Constantes demográficas
     static const double PROB_ACCESO_JOVENES;

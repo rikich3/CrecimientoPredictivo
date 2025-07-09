@@ -1,7 +1,7 @@
 #ifndef GESTOR_DATOS_H
 #define GESTOR_DATOS_H
 
-#include "persona.h"
+#include "../data_estructures/persona.h"
 #include <QVector>
 #include <QString>
 #include <QMap>

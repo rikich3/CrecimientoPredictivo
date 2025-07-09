@@ -14,14 +14,16 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        persona.h
-        gestor_datos.h
-        gestor_datos.cpp
-        analizador_trafico.h
-        analizador_trafico.cpp
+        ui/mainwindow.cpp
+        ui/mainwindow.h
+        ui/mainwindow.ui
+        data_estructures/persona.h
+        data_estructures/gestor_datos.h
+        data_estructures/gestor_datos.cpp
+        system/analizador_trafico.h
+        system/analizador_trafico.cpp
+        system/uplifting_model.h
+        system/uplifting_model.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

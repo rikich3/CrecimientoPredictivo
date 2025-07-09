@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QScreen>
 #include <QPainter>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -133,18 +134,14 @@ void MainWindow::setupUI()
     // Conectar señales
     connect(comboTipoEspacio, QOverload<int>::of(&QComboBox::currentIndexChanged), 
             this, &MainWindow::onTipoEspacioChanged);
-    connect(comboTipoEspacio, QOverload<int>::of(&QComboBox::currentIndexChanged), 
-            this, &MainWindow::actualizarRequiereInternet);
     connect(btnIniciarAnalisis, &QPushButton::clicked, this, &MainWindow::iniciarAnalisis);
     connect(spinEdadMin, QOverload<int>::of(&QSpinBox::valueChanged), 
             this, &MainWindow::onEdadMinChanged);
     connect(spinEdadMax, QOverload<int>::of(&QSpinBox::valueChanged), 
             this, &MainWindow::onEdadMaxChanged);
     
-    // Inicializar espacios
+    // Inicializar espacios y estado del checkbox
     actualizarEspacios();
-    
-    // Inicializar estado de acceso a internet
     actualizarRequiereInternet();
     
     // Añadir widgets al layout principal
@@ -290,6 +287,7 @@ void MainWindow::inicializarDatos()
     
     // Intentar cargar datos existentes
     gestorDatos->cargarPoblacionDesdeCSV(rutaCSV);
+
     
     // Si no hay datos, generar población
     if (gestorDatos->obtenerPoblacion().isEmpty()) {
@@ -355,6 +353,16 @@ void MainWindow::actualizarEspacios()
             comboEspacio->addItem(plataforma);
         }
         labelEspacio->setText("Plataforma:");
+    }
+}
+
+void MainWindow::actualizarRequiereInternet()
+{
+    if (comboTipoEspacio->currentText() == "Plataforma Digital") {
+        checkAccesoInternet->setChecked(true);
+        checkAccesoInternet->setEnabled(false);
+    } else {
+        checkAccesoInternet->setEnabled(true);
     }
 }
 
@@ -506,18 +514,6 @@ void MainWindow::mostrarResultados(const ResultadoAnalisis& resultado)
 QString MainWindow::obtenerRutaCSV()
 {
     QString rutaDatos = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    std::cout << "Ruta de datos: " << rutaDatos.toStdString() << std::endl;
     return rutaDatos + "/poblacion_arequipa.csv";
-}
-
-void MainWindow::actualizarRequiereInternet()
-{
-    // Si el tipo de espacio es "Plataforma Digital", requiere internet automáticamente
-    if (comboTipoEspacio->currentText() == "Plataforma Digital") {
-        checkAccesoInternet->setChecked(true);
-        checkAccesoInternet->setEnabled(false); // Deshabilitar para que no se pueda cambiar
-        checkAccesoInternet->setText("Requiere acceso a internet (automático para plataformas digitales)");
-    } else {
-        checkAccesoInternet->setEnabled(true); // Habilitar para que se pueda cambiar
-        checkAccesoInternet->setText("Requiere acceso a internet");
-    }
 }
