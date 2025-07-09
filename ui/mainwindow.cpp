@@ -384,7 +384,7 @@ void MainWindow::iniciarAnalisis()
     // Realizar análisis
     QApplication::processEvents(); // Actualizar UI
     
-    int clientesPotenciales = analizadorTrafico->calcularTrafico(
+    int clientesPotenciales = analizadorTrafico->calcularTraficoConUplift(
         gestorDatos->obtenerPoblacion(), cliente, espacio, producto, tipoEspacio
     );
     
